@@ -94,7 +94,42 @@ ansible localhost -m ping
 
 ## 1-4. 호스트 등록
   
+
 ```bash
 vim /etc/ansible/hosts
 ```
 
+```bash
+[web]
+호스트IP1
+호스트IP2
+```
+
+![3](./images/3.png)
+
+### id_rsa 생성 및 등록
+
+![4](./images/4.png)
+
+* id_rsa
+  * private key
+  * 절대로 타인에게 노출되면 안된다.
+* id_rsa.pub
+  * public key 
+  * 접속하려는 리모트 머신의 authorized_keys에 입력한다.
+
+> ssh id_rsa에 대한 자세한 내용은 [생활코딩 강좌](https://opentutorials.org/module/432/3742) 를 참고하세요.
+
+```bash
+chmod 700 /root/.ssh
+chmod 600 /root/.ssh/id_rsa
+chmod 644 /root/.ssh/id_rsa.pub
+chmod 644 /root/.ssh/authorized_keys
+chmod 644 /root/.ssh/known_hosts
+```
+
+각각의 호스트 서버에 아래와 같이 ```/home/ec2-user/.ssh/authorized_keys``` 파일에 **앤서블 서버의 id_rsa.pub** 코드를 추가합니다.
+
+```bash
+vim /home/ec2-user/.ssh/authorized_keys
+```
