@@ -88,14 +88,31 @@ ansible all -m user -a "name=jojoldu state=absent remove=yes" -u ec2-user
 자 그럼 계정을 생성하고 해당 계정에 비밀번호를 추가해보겠습니다.  
 (기존 계정의 비밀번호 변경도 같은 방법으로 가능합니다.)  
   
-먼저 파이썬의 암호화 모듈이 필요합니다.  
-
-
+2-2에서 계정을 삭제했다면 다시 같은 계정을 생성해주시고, 삭제하지 않으셨다면 그대로 진행하시면 됩니다.  
+  
+아래 명령어로 **본인이 원하는 비밀번호**로 변경합니다.
 
 ```bash
-ansible all -m user -a "name=jojoldu update_password=always password={{ '변경하고싶은 비밀번호' | password_hash('sha512') }}" -k --user=dwlee
+ansible all -m user -a "name=jojoldu update_password=always password={{ '변경하고싶은 비밀번호' | password_hash('sha512') }}" -u ec2-user
 ```
 
+저는 간단하게 1234 라는 비밀번호를 사용했습니다.
+
+![7](./images/7.png)
+
+비밀 번호가 추가되었으면 한번 확인해보겠습니다.  
+호스트 서버들에 접속하신뒤 신규 생성 (+비밀번호가 추가된) 계정으로 로그인해봅니다.
+
+![8](./images/8.png)
+
+> 제가 사용한 ec2 접속기는 [ec2-gauza](https://github.com/leejaycoke/ec2-gazua) 입니다.  
+자세한 설치법은 [이전 포스팅](https://jojoldu.tistory.com/311)을 참고해주세요.
+
+비밀번호도 잘 추가 되었습니다!
+
+## 2-4. sudo 권한 추가
+
+마지막으로 신규 추가된 계정에 sudo 권한을 추가해보겠습니다.  
 
 ```bash
 echo 'jojoldu   ALL=(ALL)   NOPASSWD:ALL' > /etc/sudoers.d/jojoldu
@@ -105,17 +122,12 @@ echo 'jojoldu   ALL=(ALL)   NOPASSWD:ALL' > /etc/sudoers.d/jojoldu
 ansible all -m shell -a "echo '$USER_NAME   ALL=(ALL)   NOPASSWD:ALL' > /etc/sudoers.d/$USER_NAME" -e "ansible_user=dwlee ansible_ssh_pass=비밀번호"
 ```
 
-```bash
-[web]
-호스트1
-호스트2
-
-[db]
-호스트3
-
-[all:vars]
-ansible_user=접속계정
-ansible_ssh_pass=접속비밀번호
+```
+      copy:
+       content: |
+         {{ USER_NAME }} ALL=(ALL) NOPASSWD: ALL
+       dest: /etc/sudoers.d/{{ USER_NAME }}
+       mode: 0644
+       validate: "/usr/sbin/visudo -c -f '%s'"
 ```
 
-## 2-5. sudoers.d 추가
