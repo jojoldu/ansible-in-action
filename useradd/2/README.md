@@ -17,7 +17,7 @@ ansible all -m user -a "name=jojoldu" -u ec2-user
 ![1](./images/1.png)
 
 이는 현재 호스트 접근 계정인 ec2-user에 ```sudo``` 권한이 없기 때문입니다.  
-이를 해결하기 위해 ec2-user가 아닌 root 계정으로 접근하기엔 부담스럽습니다.  
+이를 해결하기 위해 ec2-user가 아닌 **root 계정으로 접근하기엔 부담**스럽습니다.  
   
 그래서 명령어를 수행할때마다 ```sudo``` 가 함께 수행될 수 있게 설정값을 추가해보겠습니다.  
   
@@ -61,32 +61,35 @@ ansible all -m shell -a "tail -n 1 /etc/passwd" -u ec2-user
 
 ![4](./images/4.png)
 
+
 ## 2-2. 임의 추가된 계정 삭제하기
 
+다음으로 방금 추가한 계정을 삭제해보겠습니다.  
+  
 삭제는 간단합니다.  
-명령어에 ```state=absent``` 만 추가하면 됩니다.
+기존 계정 생성 명령어에 ```state=absent remove=yes``` 만 추가하면 됩니다.
 
 ```bash
-ansible all -m user -a "name=jojoldu state=absent" -k --user=dwlee
+ansible all -m user -a "name=jojoldu state=absent remove=yes" -u ec2-user
 ```
+
+![5](./images/5.png)
 
 다시 삭제되었는지 확인 해봅니다.
 
-```bash
-ansible all -m shell -a "tail -n 1 /etc/passwd" -k --user=dwlee
-```
+![6](./images/6.png)
 
-여기서 더이상 ```jojoldu``` 라는 계정가 출력되지 않으면 삭제가 정상적으로 수행된 것을 알 수 있습니다.
+더이상 마지막 계정 표기에 jojoldu가 아닌 ```ec2-user```만 노출된다면 정상적으로 삭제 된 것입니다.  
+  
+테스트로 추가된 계정은 이렇게 삭제하면 되겠죠?
 
-## 2-3. 패스워드 변경하기
+## 2-3. 패스워드 추가하기
 
-파이썬의 암호화 모듈이 필요합니다.  
+자 그럼 계정을 생성하고 해당 계정에 비밀번호를 추가해보겠습니다.  
+(기존 계정의 비밀번호 변경도 같은 방법으로 가능합니다.)  
+  
+먼저 파이썬의 암호화 모듈이 필요합니다.  
 
-> 만약 pip가 설치되어 있지 않다면 (리눅스에서 파이썬2는 기본설치입니다.) ```yum install python-pip``` 로 설치해주세요.
-
-```bash
-yum install python-pip
-```
 
 
 ```bash
