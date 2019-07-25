@@ -27,8 +27,13 @@ YAML은 기본적으로 **기계가 파싱하기 쉽게, 사람이 다루기 쉽
 ## 3-2. 플레이북 IDE
 
 일단 플레이북을 편집하기에 좋은 도구가 필요합니다.  
+YAML 편집기면 다 가능할것 같지만, 개인적인 생각으론 앤서블 전용 플러그인이 있는 편집기가 작성하기 가장 편했습니다.  
+  
+앤서블 플러그인을 갖고 있는 IDE는 크게 2가지 종류가 있습니다.  
+인텔리제이 기반 IDE들과 서브라임류의 에디터들입니다.  
 
-* [](https://marketplace.visualstudio.com/items?itemName=vscoss.vscode-ansible)
+
+* [앤서블 플러그인](https://marketplace.visualstudio.com/items?itemName=vscoss.vscode-ansible)
 
 ## 3-3. 플레이북으로 개선
 
