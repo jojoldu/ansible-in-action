@@ -38,6 +38,7 @@ YAML 편집기면 다 가능할것 같지만, 개인적인 생각으론 앤서�
 
 * [앤서블 플러그인](https://marketplace.visualstudio.com/items?itemName=vscoss.vscode-ansible)
 
+서버에선 보통 GUI 환경이 지원 안되니 개인 PC에서 코드를 작성후 서버에 그대로 붙여넣는 식으로 개발하시면 됩니다.
 
 ## 3-3. 플레이북으로 개선
 
@@ -81,7 +82,9 @@ site.yml이 바로 **플레이북**입니다.
   * 명령 단위입니다.
   * 실제 수행될 모듈 혹은 쉘 명령어등의 단위로 사용됩니다.
 
-자 그럼 앞에서 진행했던 앤서블 스크립트를 플레이북으로 옮겨봅니다.
+자 그럼 [2장](https://jojoldu.tistory.com/433)에서 진행했던 앤서블 스크립트를 플레이북으로 옮겨봅니다.
+
+![1](./images/1.png)
 
 ```yaml
 ---
@@ -119,8 +122,52 @@ site.yml이 바로 **플레이북**입니다.
   * copy 모듈을 이용해 sudoers.d에 root권한을 추가합니다.
   * 2장에서 실행한 스크립트: ```ansible all -m copy -a "content='jojoldu ALL=(ALL) NOPASSWD: ALL' dest=/etc/sudoers.d/jojoldu mode=0644 validate='/usr/sbin/visudo -c -f \'%s\''"``` 를 그대로 옮긴 형태입니다.
 
+다 작성되셨다면 서버로 해당 코드를 복사하여 site.yml파일을 생성하여 저장합니다.
+
+![2](./images/2.png)
+
+
 ## 3-4. 플레이북 실행
 
+만들어진 플레이북을 실행해보겠습니다.  
+
 ```bash
-ansible-playbook useradd.yml --extra-vars "USER_NAME=jojoldu2 PASSWORD=패스워드" 
+ansible-playbook site.yml --extra-vars "USER_NAME=사용자명 PASSWORD=패스워드" -u ec2-user
 ```
+
+* ```ansible-playbook```
+  * 앤서블 플레이북 실행 명령어입니다.
+  * 바로 다음에 플레이북 파일을 명시합니다.
+* ```site.yml```
+  * **현재 위치에서 상대 경로**로 파일을 찾습니다.
+* ```--extra-vars```
+  * **플레이북 파일에서 사용할 변수**를 생성합니다.
+  * 여기서 생성한 변수가 실제 플레이북에서 사용될 변수가 됩니다.
+  * USER_NAME, PASSWORD 등이 플레이북 (site.yml) 에서 ```{{ USER_NAME }}```, ```{{ PASSWORD }} ``` 로 사용할 수 있습니다.
+
+![3](./images/3.png)
+
+실제로 잘 생성되었는지 스크립트로 확인하면 성공한 것을 확인할 수 있습니다.
+
+![4](./images/4.png)
+
+서버에 직접 가서 비밀번호로 신규 생성된 jojoldu2 사용자로 전환도 확인 됩니다.
+
+![5](./images/5.png)
+
+jojoldu2 사용자가 잘 생성된 것을 확인할 수 있습니다.
+
+## 3-5. 인벤토리
+
+위에서 계속 ```-u ec2-user```를 입력하는 것엔 한가지 문제가 있습니다.  
+
+## 3-6. 마무리
+
+플레이북까지 했지만 아직 아쉬운 점이 많습니다.
+
+* 플레이북을 Git으로 버전관리 할 수 없을까?
+* 설정 파일들 (```hosts```, ```ansible.cfg```)도 Git으로 관리될 수 없을까?
+* 젠킨스와 같은 CI 환경에서 플레이북을 배포할 순 없을까?
+  * 개발자가 항상 서버로 코드를 복사하는 방식이 아니라.
+
+다음 시간에는 바로 이 문제점들을 한번 해결해보겠습니다.
