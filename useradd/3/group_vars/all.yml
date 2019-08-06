@@ -1,0 +1,7 @@
+---
+all:
+  web:
+    hosts:
+      ip1
+      ip2
+
