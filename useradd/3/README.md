@@ -2,6 +2,8 @@
 
 이번 시간에는 앤서블의 플레이북 (Playbook) 을 통해 그동안 CLI를 하던 방식을 개선해보겠습니다.
 
+> 모든 코드는 [Github](https://github.com/jojoldu/ansible-in-action)에 있습니다.
+
 ## 3-1. 플레이북?
 
 앤서블 공식 홈페이지의 [플레이북 소개](https://docs.ansible.com/ansible/latest/user_guide/playbooks.html)를 한번 보겠습니다.
