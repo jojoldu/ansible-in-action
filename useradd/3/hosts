@@ -1,0 +1,6 @@
+[web]
+ip1
+ip2
+
+[all:vars]
+ansible_user=ec2-user
