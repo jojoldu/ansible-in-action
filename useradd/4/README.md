@@ -14,9 +14,27 @@
 * [젠킨스와 깃허브 프로젝트 연동](https://jojoldu.tistory.com/442)
 
 
-## 1. 플레이북 Github 
+## 1. Github 관리로 전환 
+
+
+
+### 플레이북
+
+EC2에서 실행중이던 플레이북 (site.yml) 을 Github 저장소에 등록합니다.
+
+### 인벤토리
+
+인벤토리 파일인 hosts는 Github으로 관리하지 않습니다.  
+물론 사내 저장소를 쓰거나 Github의 private 저장소를 쓴다면 무방하지만, public 저장소를 쓴다면 IP나 다른 민감한 정보들이 공개되는거나 마찬가지입니다.  
+그래서 별도로 
+
+
+> **private 저장소**를 쓰신다면 Github에 인벤토리도 함께 올리셔도 괜찮습니다.
+
+
 
 ## 2. 젠킨스 설정
+
 
 ![jenkins1](./images/jenkins1.png)
 

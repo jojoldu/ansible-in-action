@@ -1,4 +1,0 @@
-[web]
-
-[all:vars]
-ansible_user=jenkins
