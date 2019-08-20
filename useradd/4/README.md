@@ -14,9 +14,29 @@
 * [젠킨스와 깃허브 프로젝트 연동](https://jojoldu.tistory.com/442)
 
 
-## 1. 젠킨스 설정
+## 1. 플레이북 Github 
+
+## 2. 젠킨스 설정
+
+![jenkins1](./images/jenkins1.png)
 
 ### 플러그인 설치
+
+![1](./images/1.png)
+
+![2](./images/2.png)
+
+지금 다운로드하고 재시작 후 설치하기
+
+![3](./images/3.png)
+
+메인페이지로 돌아가기
+
+![4](./images/4.png)
+
+![5](./images/5.png)
+
+재시작 합니다.  
 
 ### 설정
 
