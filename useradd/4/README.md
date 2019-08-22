@@ -32,7 +32,7 @@
 ### 인벤토리
 
 인벤토리 파일인 **hosts는 Github으로 관리하지 않겠습니다**.  
-사내 저장소를 쓰거나 Github의 private 저장소를 쓴다면 Github으로 관리합니다.  
+사내 저장소를 쓰거나 Github의 private 저장소를 쓴다면 Github으로 관리 합니다.  
 다만 여기에서의 예제는 Github **public** 저장소를 기준으로 하기 때문에 **민감한 정보가 외부에 공개**될 수 있습니다.  
 마찬가지로 이 예제를 진행하시는 분들도 정보 공개 위험이 있으니 안전하게 진행하겠습니다.  
   
@@ -61,7 +61,7 @@ cp /root/ansible-useradd/hosts /var/lib/jenkins/ansible/useradd/
 ![2](./images/2.png)
 
 젠킨스의 서비스 실행자를 확인합니다.  
-(아마 대부분이 ```jenkins```일겁니다.)  
+(대부분은 ```jenkins``` 입니다.)  
 
 ![3](./images/3.png)
 
@@ -80,14 +80,24 @@ Github의 설정이 모두 끝났으니 젠킨스 설정을 진행해보겠습�
 ## 2. 젠킨스 설정
 
 
-
 ### 젠킨스 사용자 sudo 권한 추가
+
+젠킨스가 결국 앤서블을 실행할 수 있어야 합니다.  
+그럼 **비밀번호 입력 없이 sudo**를 실행할 수 있어야 합니다.  
+아래와 같이 /etc/sudoers.d/jenkins 에 jenkins 사용자를 등록합니다.  
 
 ```bash
 echo "jenkins ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/jenkins
 ```
 
 ![5](./images/5.png)
+
+그리고 tty 없이 sudo를 실행할 수 있도록 /etc/sudoers 파일을 수정합니다.
+
+> 참고: [tty는 무엇인가요?](https://kldp.org/node/155210)
+
+visudo를 입력하시면 /etc/sudoers 파일을 안전하게 편집할 수 있습니다.  
+(```visudo```만 입력하셔야 합니다.)
 
 ```bash
 visudo
@@ -99,24 +109,58 @@ visudo
 #Defaults requiretty # 주석
 ```
 
+설정이 다 되셨다면 젠킨스에서 앤서블 명령어를 실행할 수 있는 준비가 되었습니다.
+
 ### 플러그인 설치
 
-젠킨스에서는 
-![1](./images/1.png)
+젠킨스에서는 앤서블을 편하게 사용할 수 있도록 플러그인들을 제공합니다.  
+해당 플러그인들을 설치하겠습니다.  
+  
+Jenkins 관리 -> 플러그인 관리로 이동합니다.
 
-![2](./images/2.png)
+![6](./images/6.png)
 
-지금 다운로드하고 재시작 후 설치하기
+설치 가능 항목에서 [Ansible](https://wiki.jenkins.io/display/JENKINS/Ansible+Plugin) 과 [AnsiColor](https://wiki.jenkins.io/display/JENKINS/AnsiColor+Plugin) 플러그인을 검색하여 체크합니다.
 
-![3](./images/3.png)
+* Ansible
+  * 앤서블 실행에 필요한 여러 파라미터를 개별적으로 지정할 수 있는 플러그인
+* AnsiColor
+  * 출력 결과를 컬러가 있는 채로 나타낼 수 있는 플러그인
 
-메인페이지로 돌아가기
 
-![4](./images/4.png)
+![7](./images/7.png)
 
-![5](./images/5.png)
+**지금 다운로드하고 재시작 후 설치하기** 를 클릭합니다.  
+  
+아래와 같이 플러그인 설치가 진행됩니다.
 
-재시작 합니다.  
+![8](./images/8.png)
+
+설치가 끝나고 설치된 플러그인 목록에 위 2개 플러그인이 존재하는지 확인합니다.
+
+![9](./images/9.png)
+
+잘 설치되었다면 젠킨스 Job을 생성합니다.  
+Freestyle project를 선택해서 개설합니다.
+
+![10](./images/10.png)
+
+매개변수에는 2개가 필요합니다.  
+String Parameter, Password Parameter  
+
+![11](./images/11.png)
+
+앤서블 파일들이 있는 깃헙 저장소와 연동 합니다.  
+
+![12](./images/12.png)
+
+![13](./images/13.png)
+
+Invoke Ansible Playbook 을 선택하여 아래와 같이 본인 환경에 맞게 등록합니다.
+
+![14](./images/14.png)
+
+
 
 ### 설정
 
