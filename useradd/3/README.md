@@ -185,6 +185,15 @@ vim hosts
 
 ![6](./images/6.png)
 
+```bash
+[web]
+호스트1
+호스트2
+
+[all:vars]
+ansible_user=ec2-user
+```
+
 **그룹 변수**
 
 * 형식은 ```[그룹이름:vars]``` 입니다.
